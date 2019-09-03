@@ -1,7 +1,7 @@
 import React from 'react';
 import PersonName from './PersonName';
 
-const PeopleList = ({people, selectedId}) => {
+const PeopleList = ({people, selectedId, onPersonSelected}) => {
     return (
         <div>
             <h5>People</h5>
@@ -10,6 +10,7 @@ const PeopleList = ({people, selectedId}) => {
                 key={person.id}
                 person={person}
                 isSelected={person.id === selectedId}
+                onClick={() => onPersonSelected(person.id)}
                 /> 
             )}
         </div>

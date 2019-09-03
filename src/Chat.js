@@ -4,7 +4,7 @@ const Chat = (props) => {
     console.log(props);
     return (
         <div>
-            Chat
+            {props.messages[0]}
         </div>
     )
 }

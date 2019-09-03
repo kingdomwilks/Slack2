@@ -14,6 +14,7 @@ const Sidebar = (props) => {
             <PeopleList
                 people={props.people}
                 selectedId={props.selectedPersonId}
+                onPersonSelected={props.onPersonSelected}
             />
         </div>
     )
