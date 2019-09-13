@@ -3,8 +3,8 @@ import ChannelName from './ChannelName';
 
 const ChannelList = ({channels, selectedId, onChannelSelected}) => {
     return (
-        <div>
-            <h5>Channels</h5>
+        <div className="channel-list">
+            <h5 className="channel-header">Channels</h5>
             {channels.map(channel => 
                 <ChannelName
                     key={channel.id}

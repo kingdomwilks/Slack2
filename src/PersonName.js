@@ -4,6 +4,7 @@ const PersonName = ({key, person, isSelected, onClick}) => {
     return (
         <div key={person.id}
             onClick={onClick}
+            className="person-name"
         >
            #
            <span>{person.name}</span> 
