@@ -60,3 +60,37 @@ html, body, #root, .container {
 .chat-input input:focus {
   outline: none;
 }
+
+.message {
+  margin-bottom: 0.7em;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.3em;
+}
+
+.chat-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  width: 95%;
+  margin: 10px;
+  text-overflow: ellipsis;
+  display: block;
+  padding-bottom: 8px;
+  border-bottom: solid 1px grey;
+  font-weight: 800;
+}
+
+.input-button {
+  width: 17.5%;
+  max-width: 150px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 0.1em;
+  font-family: "Lato";
+  text-overflow: ellipsis;
+}

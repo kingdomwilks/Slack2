@@ -20,8 +20,8 @@ class App extends React.Component {
           ],
         messagesbyChannelId: null,
         messagesbyPersonId: null,
-        selectedChannelId: null,
-        selectedPersonId: null
+        selectedChannelId: 1,
+        selectedPersonId: 1
         }
 
     handleChannelSelected = (channelId) => {
@@ -37,6 +37,34 @@ class App extends React.Component {
             selectedPersonId: personId
         });
     }
+
+    handleSentMessage = (value) => {
+        const {selectedChannelId, selectedPersonId, channels} = this.state;
+    
+        if(this.state.selectedChannelId) {
+          this.setState({
+            ...this.state,
+              channels: [
+                ...this.state.channels,
+                this.state.channels[selectedChannelId-1].messages.push(value)
+              ]
+            }
+          );
+        }
+
+        if(this.state.selectedPersonId) {
+          this.setState({
+            ...this.state,
+              people: [
+                ...this.state.people,
+                this.state.people[selectedPersonId-1].messages.push(value)
+              ]
+            }
+          );
+        }
+    }
+
+    
 
     render() {
     
@@ -76,6 +104,7 @@ class App extends React.Component {
                     selectedChannelId={this.state.selectedChannelId}
                     selectedPersonId={this.state.selectedPersonId}
                     isSomethingSelected={this.isSomethingSelected}
+                    onSendMessage={this.handleSentMessage}
                 />
                 
             </div>

@@ -1,29 +1,50 @@
 import React from 'react';
 import ChatInput from './ChatInput';
+import MessageList from './MessageList';
+import ChatMessageAndInput from './ChatMessageAndInput';
 
-const Chat = ({messages, channels, selectedChannelId}) => {
+const Chat = ({messages, channels, selectedChannelId, selectedPersonId, people, onSendMessage}) => {
     
     //console.log(props);
-    console.log(selectedChannelId);
+    console.log('selected channel id', selectedChannelId);
 
-    //Line 15: Your Channel = #{channels[0].name} - Works fine
-    // But {channels[selectedChannelId - 1].name} - Won't work
-
-    return (
-        <div>
-            <div>
-            Your Channel = #{channels[0].name}
-            <br></br>
-            This is the channel name theoretically.
-            <br></br>
-            {messages[0]}
-            <br></br>
-            {messages[1]}
+        if(selectedChannelId == null){
+            return (
+                <div className="chat">
+                    <div className="chat-header">
+                    #{people[selectedPersonId-1].name}
+                    </div>
+                <ChatMessageAndInput
+                    messages={messages}
+                    onSendMessage={onSendMessage}
+                />
+                </div>
+            )
+        }
+        else if (selectedPersonId == null){
+            return (
+            <div className="chat">
+                <div className="chat-header">
+                #{channels[selectedChannelId-1].name}
+                </div>
+                <ChatMessageAndInput
+                    messages={messages}
+                    onSendMessage={onSendMessage}
+                />
             </div>
-            <ChatInput/>
-        </div>
-    );
-}
+            )
+        }
+        else return (
+            <div className="chat">
+                <div className="chat-header">
+                Select a channel buddy!
+                </div>
+                
+            </div>
+        );
+    }
+
+
 
 export default Chat;
 

@@ -22,11 +22,18 @@ class ChatInput extends React.Component {
         }
     
         if(event.key === 'Enter') {
-          //this.props.onSendMessage(this.state.text);
+          this.props.onSendMessage(this.state.value);
           this.setState({
             value: ''
         })
         }
+      }
+    
+      handleClick = (event) => {
+        this.props.onSendMessage(this.state.value);
+        this.setState({
+          value: ''
+        })
       }
 
     render() {
@@ -39,7 +46,7 @@ class ChatInput extends React.Component {
                 onChange={this.handleTyping}
                 onKeyPress={this.handleKeyPress}
             />
-            <button onClick={this.handleSubmit}>Send</button>
+            <button className="input-button" onClick={this.handleClick}>Send</button>
         </div>
         );
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import ChannelName from './ChannelName';
 
 const ChannelList = ({channels, selectedId, onChannelSelected}) => {
+    console.log(channels);
     return (
         <div className="channel-list">
             <h5 className="channel-header">Channels</h5>
