@@ -1,12 +1,13 @@
 import React from 'react';
 import Chat from './Chat';
 import Sidebar from './Sidebar';
+import {database} from './firebase';
 
 class App extends React.Component {
     state = {
         channels : [
             { id: 1, name: 'react', messages: ['React message 1']},
-            { id: 2, name: 'redux', hasUnreads: true, messages: ['Redux message 1'] },
+            { id: 2, name: 'redux', messages: ['Redux message 1'] },
             { id: 3, name: 'mobx', messages: ['mobx message 1'] },
             { id: 4, name: 'react-router', messages: ['react-router message 1']}
         ],
@@ -18,8 +19,6 @@ class App extends React.Component {
             { id: 5, name: 'Erin', messages: ["Erin is evil"] },
             { id: 6, name: 'Joe', messages: ["Joe is the joker from Batman"] }
           ],
-        messagesbyChannelId: null,
-        messagesbyPersonId: null,
         selectedChannelId: 1,
         selectedPersonId: 1
         }
@@ -38,46 +37,90 @@ class App extends React.Component {
         });
     }
 
+    sendChannelMessageToFirebase = () => {
+        database().ref(`channels/${this.state.selectedChannelId}`).set(
+            this.state.channels[this.state.selectedChannelId - 1]
+        );
+    }
+
+    sendPeopleMessageToFirebase = () => {
+        database().ref(`people/${this.state.selectedPersonId}`).set(
+            this.state.people[this.state.selectedPersonId - 1]
+        );
+    }
+
+    firebaseChannelsListener = () => {
+        database().ref('channels/').on('value', (snapshot) => {
+        let consol = snapshot.val();
+        console.log(consol);
+        consol.shift();
+        console.log(consol);
+        this.setState({
+            channels: consol
+        });
+        });
+    }
+
+    firebasePeopleListener = () => {
+        database().ref('people/').on('value', (snapshot) => {
+            let people = snapshot.val();
+            console.log(people);
+            this.setState({
+                people: people
+            });
+        });
+    }
+
     handleSentMessage = (value) => {
         const {selectedChannelId, selectedPersonId, channels} = this.state;
     
         if(this.state.selectedChannelId) {
-          this.setState({
-            ...this.state,
-              channels: [
-                ...this.state.channels,
-                this.state.channels[selectedChannelId-1].messages.push(value)
-              ]
-            }
-          );
+          this.setState(prevState =>({
+            channels : prevState.channels.map((channel,i) =>{
+                if(i === selectedChannelId -1) return {
+                    ...channel,
+                    messages: [...channel.messages, value]
+                }
+                    return channel
+                })
+        }),
+        this.sendChannelMessageToFirebase,
+        );
         }
+
 
         if(this.state.selectedPersonId) {
-          this.setState({
-            ...this.state,
-              people: [
-                ...this.state.people,
-                this.state.people[selectedPersonId-1].messages.push(value)
-              ]
-            }
-          );
-        }
+          this.setState(prevState =>({
+            people : prevState.people.map((person,i) =>{
+                if(i === selectedPersonId -1) return {
+                    ...person,
+                    messages: [...person.messages, value]
+                }
+                return person
+            })
+        }),
+        this.sendPeopleMessageToFirebase,
+        );
+      }
     }
 
-    
+    componentDidMount() {
+        this.firebaseChannelsListener();
+        this.firebasePeopleListener();
+    }
 
     render() {
-    
+    console.log(this.state);
     let messages = [];
     let isSomethingSelected = false;
     
     if(this.state.selectedChannelId) {
-        messages = this.state.channels[this.state.selectedChannelId-1].messages;
+        messages = this.state.channels[this.state.selectedChannelId - 1].messages;
         isSomethingSelected = true;
     }
 
     if(this.state.selectedPersonId) {
-        messages = this.state.people[this.state.selectedPersonId-1].messages;
+        messages = this.state.people[this.state.selectedPersonId - 1].messages;
         isSomethingSelected = true;
     }
     else isSomethingSelected = false;
